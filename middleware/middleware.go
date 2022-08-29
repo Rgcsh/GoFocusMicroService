@@ -129,7 +129,6 @@ func GetUid() gin.HandlerFunc {
 		uid := c.GetHeader("Access-User")
 		if uid != "" {
 			c.Set("uid", uid)
-			fmt.Println(uid)
 		}
 		c.Next()
 	}
