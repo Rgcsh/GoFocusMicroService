@@ -1,0 +1,25 @@
+App:
+  RunMode: debug
+#  是否启动性能分析
+#  EnablePProf: false
+  EnablePProf: true
+
+Redis:
+  Url: "redis://:Password@127.0.0.1:16379/1"
+  Prefix: "FCS:GO:"
+
+DataBase:
+  FocusGoDB: "UserName:Password@tcp(127.0.0.1:13306)/focus_go_db?charset=utf8mb4&parseTime=True&loc=Local"
+
+LogConf:
+  FilePath: "./log/GoFocusMicroService.log"
+
+Etcd:
+#  Etcd以代理模式运行时的代理地址 或 单机部署时的地址
+  GrpcProxy: "127.0.0.1:2379"
+
+RabbitmqConf:
+  Host: "127.0.0.1"
+  Port: "5672"
+  UserName: ""
+  Password: "xxx"

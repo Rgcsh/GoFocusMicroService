@@ -1,0 +1,39 @@
+variables:
+  PROJ_NAME: "go_focus_micro_service"
+#  阿里云docker镜像地址
+  PUBLIC_REGISTRY: "registry.cn-hangzhou.aliyuncs.com/busy_service/$PROJ_NAME:$CI_COMMIT_SHORT_SHA"
+  PRIVATE_REGISTRY: "registry-vpc.cn-hangzhou.aliyuncs.com/busy_service/$PROJ_NAME:$CI_COMMIT_SHORT_SHA"
+
+stages:
+  - build
+  - deploy
+
+job_build:
+  stage: build
+  script:
+#    - go mod tidy
+#    - go mod vendor
+    - docker login --username $REGISTRY_USER --password $REGISTRY_PWD registry.cn-hangzhou.aliyuncs.com
+    - docker build -t $PROJ_NAME:latest .
+    - docker tag $PROJ_NAME:latest $PUBLIC_REGISTRY
+    - docker push $PUBLIC_REGISTRY
+    - docker rmi $PUBLIC_REGISTRY $PROJ_NAME:latest
+  #  when: manual
+  tags:
+    - ali-test-xxx
+
+
+# 部署到测试服
+job_deploy_test:
+  stage: deploy
+  #  when: manual
+  script:
+    - cd /home/xxx/go_focus_micro_service
+    # 修改 版本名称
+    # -i:源文件修改
+    # s:替换
+    # 此命令含义为 替换 busy_service/go_focus_micro_service:xxxx 为新版本号
+    - sed -i "s!busy_service\/go_focus_micro_service:[0-9a-z]*!busy_service\/go_focus_micro_service:$CI_COMMIT_SHORT_SHA!" docker-compose.yml
+    - docker-compose up -d go_focus_micro_service
+  tags:
+    - ali-test-xxx

@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+
+  go_focus_micro_service:
+    image: registry-vpc.cn-hangzhou.aliyuncs.com/busy_service/go_focus_micro_service:069dae46
+    restart: always
+    environment:
+      LOC_CFG: /data/config/config.yml
+    volumes:
+      - ./go_focus_micro_service.yml:/data/config/config.yml
+    ports:
+      - "7066:7066"
